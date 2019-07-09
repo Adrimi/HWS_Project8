@@ -57,6 +57,17 @@ class ViewController: UIViewController {
         currentAnswer.isUserInteractionEnabled = false
         view.addSubview(currentAnswer)
         
+        // MARK - buttons
+        let submit = UIButton(type: .system)
+        submit.translatesAutoresizingMaskIntoConstraints = false
+        submit.setTitle("SUBMIT", for: .normal)
+        view.addSubview(submit)
+        
+        let clear = UIButton(type: .system)
+        clear.translatesAutoresizingMaskIntoConstraints = false
+        clear.setTitle("CLEAR", for: .normal)
+        view.addSubview(clear)
+        
         NSLayoutConstraint.activate([
             scoreLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
             scoreLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
@@ -72,7 +83,15 @@ class ViewController: UIViewController {
             
             currentAnswer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             currentAnswer.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5),
-            currentAnswer.topAnchor.constraint(equalTo: cluesLabel.bottomAnchor, constant: 20)
+            currentAnswer.topAnchor.constraint(equalTo: cluesLabel.bottomAnchor, constant: 20),
+            
+            submit.topAnchor.constraint(equalTo: currentAnswer.bottomAnchor),
+            submit.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -100),
+            submit.heightAnchor.constraint(equalToConstant: 44),
+            
+            clear.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 100),
+            clear.centerYAnchor.constraint(equalTo: submit.centerYAnchor),
+            clear.heightAnchor.constraint(equalToConstant: 44)
             
             
             ])
@@ -85,7 +104,5 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
-
-
 }
 
