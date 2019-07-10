@@ -10,11 +10,18 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    // MARK - UI
     var cluesLabel: UILabel!
     var answerLabel: UILabel!
     var currentAnswer: UITextField!
     var scoreLabel: UILabel!
     var letterButtons = [UIButton]()
+    
+    // MARK - Data
+    var activatedButtons = [UIButton]()
+    var solutions = [String]()
+    var score = 0
+    var level = 1
     
     override func loadView() {
         view = UIView()
@@ -123,6 +130,7 @@ class ViewController: UIViewController {
                 let frame = CGRect(x: column * width, y: row * height, width: width, height: height)
                 
                 letterButton.frame = frame
+                letterButton.addTarget(self, action: #selector(letterTapped), for: .touchUpInside)
                 
                 buttonsView.addSubview(letterButton)
                 letterButtons.append(letterButton)
@@ -132,6 +140,52 @@ class ViewController: UIViewController {
         cluesLabel.backgroundColor = .orange
         answerLabel.backgroundColor = .yellow
         buttonsView.backgroundColor = .gray
+        
+        // MARK - targeting buttons
+        
+        submit.addTarget(self, action: #selector(submitTapped), for: .touchUpInside)
+        clear.addTarget(self, action: #selector(clearTapped), for: .touchUpInside)
+        
+    }
+    
+    @objc func letterTapped(_ sender: UIButton) {
+        
+    }
+    
+    @objc func submitTapped(_ sender: UIButton) {
+        
+    }
+    
+    @objc func clearTapped(_ sender: UIButton) {
+        
+    }
+    
+    func loadLevel() {
+        var clueString = ""
+        var solutionString = ""
+        var letterBits = [String]()
+        
+        if let levelFileURL = Bundle.main.url(forResource: "level\(level)", withExtension: "txt") {
+            if let  levelContents = try? String(contentsOf: levelFileURL) {
+                var lines = levelContents.components(separatedBy: "\n")
+                lines.shuffle()
+                
+                for (index, line) in lines.enumerated() {
+                    let parts = line.components(separatedBy: ": ")
+                    let answer = parts[0]
+                    let clue = parts[1]
+                    
+                    clueString += "\(index+1). \(clue)\n"
+                    
+                    let solutionWord = answer.replacingOccurrences(of: "|", with: "")
+                    solutionString += "\(solutionWord.count) letters\n"
+                    solutions.append(solutionWord)
+                    
+                    let bits = answer.components(separatedBy: "|")
+                    letterBits += bits
+                }
+            }
+        }
     }
     
     override func viewDidLoad() {
