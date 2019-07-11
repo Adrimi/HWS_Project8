@@ -32,6 +32,7 @@ class ViewController: UIViewController {
         scoreLabel = UILabel()
         scoreLabel.translatesAutoresizingMaskIntoConstraints = false
         scoreLabel.textAlignment = .right
+        scoreLabel.font = UIFont.systemFont(ofSize: 28)
         scoreLabel.text = "Score: 0"
         view.addSubview(scoreLabel)
         
@@ -39,7 +40,7 @@ class ViewController: UIViewController {
         
         cluesLabel = UILabel()
         cluesLabel.translatesAutoresizingMaskIntoConstraints = false
-        cluesLabel.font = UIFont.systemFont(ofSize: 24)
+        cluesLabel.font = UIFont.systemFont(ofSize: 28)
         cluesLabel.text = "CLUES"
         cluesLabel.numberOfLines = 0
         cluesLabel.setContentHuggingPriority(UILayoutPriority(1), for: .vertical)
@@ -49,7 +50,7 @@ class ViewController: UIViewController {
         
         answerLabel = UILabel()
         answerLabel.translatesAutoresizingMaskIntoConstraints = false
-        answerLabel.font = UIFont.systemFont(ofSize: 24)
+        answerLabel.font = UIFont.systemFont(ofSize: 28)
         answerLabel.text = "Answer?!"
         answerLabel.textAlignment = .right
         answerLabel.numberOfLines = 0
@@ -70,11 +71,13 @@ class ViewController: UIViewController {
         
         let submit = UIButton(type: .system)
         submit.translatesAutoresizingMaskIntoConstraints = false
+        submit.titleLabel?.font = UIFont.systemFont(ofSize: 28)
         submit.setTitle("SUBMIT", for: .normal)
         view.addSubview(submit)
         
         let clear = UIButton(type: .system)
         clear.translatesAutoresizingMaskIntoConstraints = false
+        clear.titleLabel?.font = UIFont.systemFont(ofSize: 28)
         clear.setTitle("CLEAR", for: .normal)
         view.addSubview(clear)
         
@@ -137,10 +140,15 @@ class ViewController: UIViewController {
             }
         }
         
-        cluesLabel.backgroundColor = .orange
-        answerLabel.backgroundColor = .yellow
-        buttonsView.backgroundColor = .gray
+        // MARK - Debug coloring
         
+//        cluesLabel.backgroundColor = .orange
+//        answerLabel.backgroundColor = .yellow
+//        currentAnswer.backgroundColor = .cyan
+//        clear.backgroundColor = .magenta
+//        submit.backgroundColor = .darkGray
+//        buttonsView.backgroundColor = .gray
+//
         // MARK - targeting buttons
         
         submit.addTarget(self, action: #selector(submitTapped), for: .touchUpInside)
@@ -166,7 +174,7 @@ class ViewController: UIViewController {
         var letterBits = [String]()
         
         if let levelFileURL = Bundle.main.url(forResource: "level\(level)", withExtension: "txt") {
-            if let  levelContents = try? String(contentsOf: levelFileURL) {
+            if let levelContents = try? String(contentsOf: levelFileURL) {
                 var lines = levelContents.components(separatedBy: "\n")
                 lines.shuffle()
                 
@@ -186,11 +194,26 @@ class ViewController: UIViewController {
                 }
             }
         }
+        
+        // Config of the buttons and labels
+        
+        cluesLabel.text = clueString.trimmingCharacters(in: .whitespacesAndNewlines)
+        answerLabel.text = solutionString.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        letterBits.shuffle()
+        
+        if letterBits.count == letterButtons.count {
+            for i in 0..<letterButtons.count {
+                letterButtons[i].setTitle(letterBits[i], for: .normal)
+            }
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        loadLevel()
     }
 }
 
