@@ -157,15 +157,31 @@ class ViewController: UIViewController {
     }
     
     @objc func letterTapped(_ sender: UIButton) {
-        
+        guard let buttonTitle = sender.titleLabel?.text else {return}
+        currentAnswer.text = currentAnswer.text?.appending(buttonTitle)
+        activatedButtons.append(sender)
+        sender.isHidden = true
     }
     
     @objc func submitTapped(_ sender: UIButton) {
+        guard let answerText = currentAnswer.text else { return }
+        
+        if let solutionLocation = solutions.firstIndex(of: answerText) {
+            
+        } else {
+            
+        }
         
     }
     
     @objc func clearTapped(_ sender: UIButton) {
+        currentAnswer.text = ""
         
+        for btn in activatedButtons {
+            btn.isHidden = false
+        }
+        
+        activatedButtons.removeAll()
     }
     
     func loadLevel() {
@@ -208,6 +224,8 @@ class ViewController: UIViewController {
             }
         }
     }
+    
+    func show
     
     override func viewDidLoad() {
         super.viewDidLoad()
