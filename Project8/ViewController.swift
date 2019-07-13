@@ -32,16 +32,15 @@ class ViewController: UIViewController {
         scoreLabel = UILabel()
         scoreLabel.translatesAutoresizingMaskIntoConstraints = false
         scoreLabel.textAlignment = .right
-        scoreLabel.font = UIFont.systemFont(ofSize: 28)
-        scoreLabel.text = "Score: 0"
+        scoreLabel.text = "Score: \(score)"
+        scoreLabel.font = UIFont.systemFont(ofSize: 24)
         view.addSubview(scoreLabel)
         
         // MARK - CLUES
         
         cluesLabel = UILabel()
         cluesLabel.translatesAutoresizingMaskIntoConstraints = false
-        cluesLabel.font = UIFont.systemFont(ofSize: 28)
-        cluesLabel.text = "CLUES"
+        cluesLabel.font = UIFont.systemFont(ofSize: 24)
         cluesLabel.numberOfLines = 0
         cluesLabel.setContentHuggingPriority(UILayoutPriority(1), for: .vertical)
         view.addSubview(cluesLabel)
@@ -50,8 +49,7 @@ class ViewController: UIViewController {
         
         answerLabel = UILabel()
         answerLabel.translatesAutoresizingMaskIntoConstraints = false
-        answerLabel.font = UIFont.systemFont(ofSize: 28)
-        answerLabel.text = "Answer?!"
+        answerLabel.font = UIFont.systemFont(ofSize: 24)
         answerLabel.textAlignment = .right
         answerLabel.numberOfLines = 0
         answerLabel.setContentHuggingPriority(UILayoutPriority(1), for: .vertical)
@@ -128,7 +126,7 @@ class ViewController: UIViewController {
             for column in 0..<5 {
                 let letterButton = UIButton(type: .system)
                 letterButton.titleLabel?.font = UIFont.systemFont(ofSize: 36)
-                letterButton.setTitle("Www", for: .normal)
+                letterButton.setTitle("err", for: .normal)
                 
                 let frame = CGRect(x: column * width, y: row * height, width: width, height: height)
                 
@@ -164,14 +162,33 @@ class ViewController: UIViewController {
     }
     
     @objc func submitTapped(_ sender: UIButton) {
+        
+        // find out an user answer text from center text field
         guard let answerText = currentAnswer.text else { return }
         
+        // find the solution in an array
         if let solutionLocation = solutions.firstIndex(of: answerText) {
             
-        } else {
+            // if solution exist, then reset buttons,
+            activatedButtons.removeAll()
             
+            // provided answer break to an array of string,
+            var splitAnswers = answerLabel.text?.components(separatedBy: "\n")
+            
+            // and put the user answer in proper place
+            splitAnswers?[solutionLocation] = answerText
+            
+            // then just merge splitted before "answerLabel"
+            answerLabel.text = splitAnswers?.joined(separator: "\n")
+            
+            currentAnswer.text = ""
+            score = score + 1
+            
+            // AND if user guessed correctly all questions, hop to next level
+            if score % 7 == 0 {
+                showMessage(title: "Well Done!", message: "Are you ready for the nex level?", nextLevel: true)
+            }
         }
-        
     }
     
     @objc func clearTapped(_ sender: UIButton) {
@@ -225,7 +242,26 @@ class ViewController: UIViewController {
         }
     }
     
-    func show
+    func levelUP(action: UIAlertAction) {
+        level += 1
+        
+        solutions.removeAll(keepingCapacity: true)
+        loadLevel()
+        
+        for btn in letterButtons {
+            btn.isHidden = false
+        }
+    }
+    
+    func showMessage(title: String, message: String, nextLevel: Bool = false) {
+        let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        if nextLevel {
+            ac.addAction(UIAlertAction(title: "Let's go!", style: .default, handler: levelUP))
+        } else {
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+        }
+        present(ac, animated: true)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
