@@ -44,8 +44,8 @@ class ViewController: UIViewController {
         
         cluesLabel = UILabel()
         cluesLabel.translatesAutoresizingMaskIntoConstraints = false
-        cluesLabel.font = UIFont.systemFont(ofSize: 24)
         cluesLabel.numberOfLines = 0
+        cluesLabel.font = UIFont.systemFont(ofSize: 20)
         cluesLabel.setContentHuggingPriority(UILayoutPriority(1), for: .vertical)
         view.addSubview(cluesLabel)
         
@@ -53,8 +53,8 @@ class ViewController: UIViewController {
         
         answerLabel = UILabel()
         answerLabel.translatesAutoresizingMaskIntoConstraints = false
-        answerLabel.font = UIFont.systemFont(ofSize: 24)
         answerLabel.textAlignment = .right
+        answerLabel.font = UIFont.systemFont(ofSize: 20)
         answerLabel.numberOfLines = 0
         answerLabel.setContentHuggingPriority(UILayoutPriority(1), for: .vertical)
         view.addSubview(answerLabel)
@@ -141,6 +141,7 @@ class ViewController: UIViewController {
                 letterButtons.append(letterButton)
             }
         }
+        buttonsView.layer.borderWidth = 1
         
         // MARK - Debug coloring
         
@@ -192,6 +193,8 @@ class ViewController: UIViewController {
             if score % 7 == 0 {
                 showMessage(title: "Well Done!", message: "Are you ready for the nex level?", nextLevel: true)
             }
+        } else {
+            showMessage(title: "Wrong!", message: "Try another combination")
         }
     }
     
